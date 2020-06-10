@@ -1,0 +1,33 @@
+{
+    "name": "CameraRig",
+    "maps": [
+        {
+            "name": "New action map",
+            "id": "156d0919-055f-4e0a-8cf8-6e45e679fc87",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "9c005471-966a-4304-9350-8fc06fa132af",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "3a3262e6-468c-4e84-b3b3-9bfe5d648df7",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

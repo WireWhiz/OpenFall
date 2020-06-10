@@ -14,34 +14,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "LeftControllerPosition",
-                    "type": "Value",
-                    "id": "b65824c7-e226-4f27-9090-d689de3f533f",
-                    "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "LeftControllerRotation",
-                    "type": "Value",
-                    "id": "a5f9f110-148d-4b81-9c3c-7722da434707",
-                    "expectedControlType": "Quaternion",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "RightControllerPosition",
-                    "type": "Value",
-                    "id": "72d17653-32de-4b44-91e2-905158fc63d3",
-                    "expectedControlType": "Vector3",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "RightControllerRotation",
-                    "type": "Value",
-                    "id": "eda0bf0f-5ce6-4e3a-b19f-ab1bd9fd9998",
-                    "expectedControlType": "Quaternion",
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "e6e5eed2-f866-4dbe-ad7f-9f8bc2833d7f",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 }
@@ -71,45 +47,12 @@
                 },
                 {
                     "name": "",
-                    "id": "300873a6-b5e3-4059-821a-b621833df1c6",
-                    "path": "<XRController>{LeftHand}/devicePosition",
+                    "id": "e347cd5d-a3dd-4a40-a980-c1dc7ac65945",
+                    "path": "<XRController>{RightHand}/primaryButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "LeftControllerPosition",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "a9f36505-ccf2-44fb-8a04-ecc6f97745ef",
-                    "path": "<XRController>{RightHand}/devicePosition",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightControllerPosition",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "00ad4596-78a0-457b-85ea-9e4fd0c5650a",
-                    "path": "<XRController>{LeftHand}/deviceRotation",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LeftControllerRotation",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "35c2dc30-5fae-4051-961f-41257efd5251",
-                    "path": "<XRController>{RightHand}/deviceRotation",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightControllerRotation",
+                    "groups": "XR",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
