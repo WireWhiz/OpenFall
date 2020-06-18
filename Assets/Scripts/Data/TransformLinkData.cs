@@ -4,7 +4,7 @@ using Unity.Entities;
 using UnityEngine;
 
 [GenerateAuthoringComponent]
-public struct HeadData : IComponentData
+public struct TransformLinkData : IComponentData
 {
 
 }

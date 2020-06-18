@@ -6,7 +6,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
-
+[UpdateInGroup(typeof(PresentationSystemGroup))]
 public class TransformInputSystem : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)

@@ -6,22 +6,29 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateAfter(typeof(TransformInputSystem))]
-public class HeadSystem : JobComponentSystem
+[UpdateInGroup(typeof(PresentationSystemGroup))]
+public class TransformLinkSystem : JobComponentSystem
 {
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        Transform head = HeadTracking.instance.transform;
+        /*
+        Transform target = TransformLink.instance.transform;
         float3 pos = new float3();
         quaternion rot = new quaternion();
         EntityManager manager = EntityManager;
-        Entities.WithAll<HeadData>().ForEach((Parent parent, in Translation translation, in Rotation rotation) => {
+        Entities.WithAll<TransformLinkData>().ForEach((in Translation translation, in Rotation rotation) => {
+            pos = translation.Value;
+            rot = rotation.Value;
+        }).Run();
+        Entities.WithAll<TransformLinkData>().ForEach((Parent parent, in Translation translation, in Rotation rotation) => {
             float4x4 transformMatrix = manager.GetComponentData<LocalToWorld>(parent.Value).Value;
             pos = math.transform(transformMatrix, translation.Value);
             rot = math.mul(rotation.Value, new quaternion(transformMatrix));
         }).Run();
-        head.position = pos;
-        head.rotation = rot;
+        target.position = pos;
+        target.rotation = rot;
+        
+        */
         return inputDeps;
     }
 }
