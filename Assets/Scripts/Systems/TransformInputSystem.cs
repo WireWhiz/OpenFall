@@ -7,9 +7,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
 [UpdateInGroup(typeof(PresentationSystemGroup))]
-public class TransformInputSystem : JobComponentSystem
+public class TransformInputSystem : SystemBase
 {
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    protected override void OnUpdate()
     {
         float3 newTranslation1 = CameraRig.instance.head.localPosition;
         quaternion newRotation1 = CameraRig.instance.head.localRotation;
@@ -34,7 +34,6 @@ public class TransformInputSystem : JobComponentSystem
                     break;
             }
         }).Run();
-        return inputDeps;
     }
     
 }

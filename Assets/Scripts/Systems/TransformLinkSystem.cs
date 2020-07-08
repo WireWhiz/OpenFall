@@ -7,9 +7,9 @@ using Unity.Transforms;
 using UnityEngine;
 
 [UpdateInGroup(typeof(PresentationSystemGroup))]
-public class TransformLinkSystem : JobComponentSystem
+public class TransformLinkSystem : SystemBase
 {
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    protected override void OnUpdate()
     {
         /*
         Transform target = TransformLink.instance.transform;
@@ -29,6 +29,5 @@ public class TransformLinkSystem : JobComponentSystem
         target.rotation = rot;
         
         */
-        return inputDeps;
     }
 }

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Entities;
 using Unity.Mathematics;
 
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
+    public float deadzone;
     public InputActionAsset input;
     public static PilotInput pilotInput;
     
@@ -24,11 +24,13 @@ public class GameController : MonoBehaviour
                 case "Pilot":
                     map["Move"].performed += (InputAction.CallbackContext context) =>
                     {
-                        pilotInput.Movement = context.ReadValue<Vector2>();
+                        pilotInput.movement = context.ReadValue<Vector2>();
+                        if (math.distance(pilotInput.movement, float2.zero) < deadzone)
+                            pilotInput.movement = float2.zero;
                     };
                     map["Jump"].performed += (InputAction.CallbackContext context) =>
                     {
-                        pilotInput.Jump = (context.ReadValue<float>() < 0.5f);
+                        pilotInput.Jump = (context.ReadValue<float>() > 0.5f);
                     };
                     break;
             }
@@ -38,7 +40,7 @@ public class GameController : MonoBehaviour
     
     public struct PilotInput
     {
-        public float2 Movement;
+        public float2 movement;
         public bool Jump;
     }
 }

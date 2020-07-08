@@ -5,19 +5,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [UpdateBefore(typeof(PlayerMovementSystem))]
-public class PlayerInputSystem : JobComponentSystem
+public class PlayerInputSystem : SystemBase
 {
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    protected override void OnUpdate()
     {
-        float2 movement = GameController.pilotInput.Movement;
+        float2 movement = GameController.pilotInput.movement;
         bool jumping = GameController.pilotInput.Jump;
-        JobHandle inputJob = Entities.ForEach((ref PlayerInputData input)=>
+        Entities.ForEach((ref PlayerInputData input)=>
         {
             input.movement = movement;
             input.jumping = jumping;
-        }).Schedule(inputDeps);
-        inputJob.Complete();
+        }).ScheduleParallel();
 
-        return inputDeps;
     }
 }

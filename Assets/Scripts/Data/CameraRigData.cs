@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
-using UnityEngine;
 
 [GenerateAuthoringComponent]
 public struct CameraRigData : IComponentData
 {
+    public Entity head;
+    public Entity leftHand;
+    public Entity rightHand;
 }
