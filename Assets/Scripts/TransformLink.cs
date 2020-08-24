@@ -6,14 +6,9 @@ using Unity.Mathematics;
 public class TransformLink : MonoBehaviour
 {
     public Entity target;
+    public EntityManager entityManager;
     public SyncType syncType;
 
-    private EntityManager entityManager;
-    // Start is called before the first frame update
-    void Start()
-    {
-        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-    }
     private void Update()
     {
         Sync();
@@ -24,6 +19,8 @@ public class TransformLink : MonoBehaviour
     }
     private void Sync()
     {
+        if (target == null)
+            return;
         switch (syncType)
         {
             case SyncType.EntityToThis:

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
 public class PilotController : MonoBehaviour
 {
     public Rig rig;
@@ -28,8 +29,7 @@ public class PilotController : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        input.controller = GetComponent<PlayerInput>();
-        input.controller.SwitchCurrentControlScheme("XR");
+        input.controller = GetComponent<PilotInput>();
     }
 
     void Update()
@@ -71,7 +71,7 @@ public class PilotController : MonoBehaviour
     }
     private struct Input
     {
-        public  PlayerInput controller;
+        public  PilotInput controller;
         public Vector2 movement;
         public bool jump;
     }
@@ -90,3 +90,4 @@ public class PilotController : MonoBehaviour
         input.movement = callback.ReadValue<Vector2>();
     }
 }
+*/

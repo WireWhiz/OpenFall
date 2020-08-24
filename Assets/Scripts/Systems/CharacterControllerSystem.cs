@@ -1,81 +1,33 @@
 ﻿using Unity.Entities;
-using Unity.Jobs;
-using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Collections;
 
-public class CharacterControllerSystem : SystemBase
+public static class CharacterController
 {
-    protected override void OnUpdate()
+    public static unsafe void Move(CharacterControllerInput characterController, ref NativeList<float3> bounceNormals, in CollisionWorld collisionWorld, out CharacterControllerOutput output) 
     {
-
-        var physicsWorldSystem = World.GetExistingSystem<Unity.Physics.Systems.BuildPhysicsWorld>();//get references before we can no longer access the main thread
-        CollisionWorld collisionWorld = physicsWorldSystem.PhysicsWorld.CollisionWorld;
-        EntityManager entityManager = EntityManager;
-        //set collisionWorld to readOnly with .WithReadOnly() so it does not throw errors
-        //JobHandle controllerJob = 
-        Entities.WithReadOnly(collisionWorld).ForEach((ref CharacterControllerData characterController, ref Translation translation, ref DynamicBuffer<BounceNormals> bounceNormalsBuffer) =>
-        {
-            bounceNormalsBuffer.Clear();//reset buffer and convert to usable state
-            DynamicBuffer<float3> bounceNormals = bounceNormalsBuffer.Reinterpret<float3>();
-
-            Move(ref characterController, ref translation, ref bounceNormals, collisionWorld);//move 
-            characterController.onGround = GetGrounded(bounceNormals, ref characterController);//update on ground
-
-            characterController.moveDelta = float3.zero;//reset moveDelta
-        }).Run();//.ScheduleParallel(JobHandle.CombineDependencies(Dependency, physicsWorldSystem.GetOutputDependency()));//run on multiple cores
-        //controllerJob.Complete();
-    }
-    
-
-    private static unsafe void Move(ref CharacterControllerData characterController, ref Translation translation, ref DynamicBuffer<float3> bounceNormals, in CollisionWorld collisionWorld) {
-        //Create Collider
-        var filter = characterController.Filter;
-        CapsuleGeometry capsuleGeometry = new CapsuleGeometry() //create our collider
-        {
-            Vertex0 = characterController.vertexTop,
-            Vertex1 = characterController.vertexBottom,
-            Radius = characterController.raduis
-        };
-        BlobAssetReference<Collider> capsuleCollider = CapsuleCollider.Create(capsuleGeometry, filter);
         //Create delta
         float3 delta = characterController.moveDelta;
+        output = default;
 
-        //constrain by near objects
-        ColliderDistanceInput constrainCheck = new ColliderDistanceInput()
-        {
-            Collider = (Collider*)capsuleCollider.GetUnsafePtr(),
-            MaxDistance = characterController.skin,
-            Transform = new RigidTransform(quaternion.identity, translation.Value)
-        };
-        var hits = new NativeList<DistanceHit>(Allocator.Temp); 
-        if (collisionWorld.CalculateDistance(constrainCheck, ref hits))
-        {
-            for(int i = 0; i < hits.Length; i++)
-           {
-                if (math.dot(delta, hits[i].SurfaceNormal) < 0)
-                {
-                    //bounceNormals.Add(hits[i].SurfaceNormal); 
-                    //delta = delta.ProjectOnPlane(hits[i].SurfaceNormal);
-                        
-                }
-            }
-        }
+        output.position = characterController.position;
 
-        CheckForClipping(ref delta, ref translation, ref bounceNormals, characterController, collisionWorld);
+        if (delta.Equals(float3.zero))
+            return;
+        CheckForClipping(ref delta, ref output.position, ref bounceNormals, characterController, collisionWorld);
         //move controller
-        translation.Value += delta;
+        output.position += delta;
 
         //Solve collision
         ColliderDistanceInput collisionCheck = new ColliderDistanceInput()
         {
-            Collider = (Collider*)capsuleCollider.GetUnsafePtr(),
+            Collider = (Collider*)characterController.capsuleCollider.GetUnsafePtr(),
             MaxDistance = 0,
-            Transform = new RigidTransform(quaternion.identity, translation.Value)
+            Transform = new RigidTransform(quaternion.identity, output.position)
         };
 
-        hits.Clear();//clear hits so we can use it again
+        NativeList<DistanceHit> hits = new NativeList<DistanceHit>(Allocator.Temp);
         if (collisionWorld.CalculateDistance(collisionCheck, ref hits))
         {
             var bounces = GetBounces(hits); //get the normal of all the hits
@@ -83,32 +35,32 @@ public class CharacterControllerSystem : SystemBase
             {
                 for(int i = 0; i < bounces.Length; i++)
                     bounceNormals.Add(bounces[i]);//add bounces
-                translation.Value -= GetBounceNormal(bounces);//get a combination of all the hits
+                output.position -= GetBounceNormal(bounces);//get a combination of all the hits
             }
             else
             {
-                SnapToGround(hits, ref translation, ref characterController);
+                SnapToGround(hits, ref output.position, ref characterController);
                 bounceNormals.Add(new float3(0, -1, 0));//add a single bounce since we are on the ground;
             }
 
         }
-
+        output.onGround = GetGrounded(bounceNormals, ref characterController);
         hits.Dispose();
     }
-    private static unsafe bool CheckForClipping(ref float3 delta, ref Translation translation, ref DynamicBuffer<float3> bounces, in CharacterControllerData characterController, in CollisionWorld collisionWorld)
+    private static unsafe bool CheckForClipping(ref float3 delta, ref float3 position, ref NativeList<float3> bounces, in CharacterControllerInput characterController, in CollisionWorld collisionWorld)
     {
         var geomitry = new SphereGeometry() //create collider
         {
             Radius = 0.01f
         };
-        BlobAssetReference<Collider> collider = SphereCollider.Create( geomitry, characterController.Filter);
+        BlobAssetReference<Collider> collider = SphereCollider.Create( geomitry, characterController.filter);
 
         var bodyCheckInput = new ColliderCastInput() //set up cast varibles
         {
             Collider = (Collider*)collider.GetUnsafePtr(),
             Orientation = quaternion.identity,
-            Start = translation.Value + characterController.center,//we want to cast from the center of the capsuel 
-            End = translation.Value + characterController.center + delta
+            Start = position + characterController.center,//we want to cast from the center of the capsuel 
+            End = position + characterController.center + delta
         };
 
         if (collisionWorld.CastCollider(bodyCheckInput, out ColliderCastHit bodyHit)) //if we hit anything
@@ -119,12 +71,12 @@ public class CharacterControllerSystem : SystemBase
         }
         return false;
     }
-    private static void SnapToGround(NativeList<DistanceHit> hits, ref Translation translation, ref CharacterControllerData characterController)
+    private static void SnapToGround(NativeList<DistanceHit> hits, ref float3 position, ref CharacterControllerInput characterController)
     {
         float maxHeight = 0;
         for (int i = 0; i < hits.Length; i++)//find the higest point
         {
-            float3 delta = hits[i].Position - (translation.Value + characterController.footOffset);
+            float3 delta = hits[i].Position - (position + characterController.footOffset);
 
             //we need to correct for the curve of the capsule
             float angle = math.acos(math.distance(delta.ProjectOnPlane(new float3(0, 1, 0)), float3.zero) / characterController.raduis);
@@ -136,7 +88,7 @@ public class CharacterControllerSystem : SystemBase
                 maxHeight = delta.y - offset;
             }
         }
-        translation.Value += new float3(0, maxHeight, 0);//set our transform to the higest point.
+        position += new float3(0, maxHeight, 0);//set our transform to the higest point.
     }
     private static float3 GetBounceNormal(NativeArray<float3> bounces)
     {
@@ -153,14 +105,12 @@ public class CharacterControllerSystem : SystemBase
         }
         return maxDists;
     }
-    private static bool GetGrounded(in DynamicBuffer<float3> bounceNormals, ref CharacterControllerData characterController)
+    private static bool GetGrounded(in NativeList<float3> bounceNormals, ref CharacterControllerInput characterController)
     {
-        characterController.groundNormal = new float3(0, 1, 0);
         for (int i = 0; i < bounceNormals.Length; i++)
         {
             if (bounceNormals[i].AngleFrom(new float3(0, -1, 0)) < math.radians(characterController.maxAngle)) //checks bounces to see if any were the ground
             {
-                characterController.groundNormal = bounceNormals[i];
                 return true;
             }
                 
@@ -184,6 +134,22 @@ public class CharacterControllerSystem : SystemBase
                 return true;
         }
         return false;
+    }
+    public static float3 GetGroundNormal(float3 footOfset, float distance, CollisionFilter Filter, CollisionWorld collisionWorld)
+    {
+        float3 normal = new float3(0, 1, 0);
+        RaycastInput input = new RaycastInput()
+        {
+            Start = footOfset,
+            End = footOfset - new float3(0, distance, 0),
+            Filter = Filter
+        };
+        if (collisionWorld.CastRay(input, out RaycastHit hit))
+        {
+            normal = hit.SurfaceNormal;
+            UnityEngine.Debug.Log("detected ground");
+        }
+        return normal;
     }
 }
 
@@ -219,4 +185,37 @@ public static class MathExtention
             return quaternion.identity;
     }
 
+}
+
+public struct CharacterControllerInput
+{
+    public float raduis;
+    public float height;
+    public float maxAngle;
+    public float3 footOffset;
+    public float3 position;
+    public float3 moveDelta;
+    public UnityEngine.LayerMask layersToIgnore;
+    public float3 center => footOffset + new float3(0, height / 2, 0);
+    public float3 vertexTop => footOffset + new float3(0, height - raduis, 0);
+    public float3 vertexBottom => footOffset + new float3(0, raduis, 0);
+    public float3 top => footOffset + new float3(0, height, 0);
+    public BlobAssetReference<Collider> capsuleCollider => CapsuleCollider.Create(new CapsuleGeometry() { Radius = raduis, Vertex0 = vertexTop, Vertex1 = vertexBottom }, filter);
+    public CollisionFilter filter
+    {
+        get
+        {
+            return new CollisionFilter()
+            {
+                BelongsTo = (uint)(~layersToIgnore.value),
+                CollidesWith = (uint)(~layersToIgnore.value)
+            };
+        }
+    }
+}
+
+public struct CharacterControllerOutput
+{
+    public float3 position;
+    public bool onGround;
 }

@@ -17,7 +17,23 @@
                     "name": "Jump",
                     "type": "PassThrough",
                     "id": "e6e5eed2-f866-4dbe-ad7f-9f8bc2833d7f",
-                    "expectedControlType": "Digital",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "LTrigger",
+                    "type": "Value",
+                    "id": "73cf7ed5-3c2f-46ba-8a86-a72eb6a4a598",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "RTrigger",
+                    "type": "Value",
+                    "id": "05dce600-baf1-4b32-b352-099665802696",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 }
@@ -47,12 +63,56 @@
                 },
                 {
                     "name": "",
+                    "id": "1a8eaff6-7c99-4fb6-8fc9-a74bad421426",
+                    "path": "<XRController>{LeftHand}/joystick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e347cd5d-a3dd-4a40-a980-c1dc7ac65945",
                     "path": "<XRController>{RightHand}/primaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cf9b86c6-28f9-4acc-9b04-287245021d49",
+                    "path": "<WMRSpatialController>{RightHand}/touchpadClicked",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1ab2f48-e4bf-4e59-8fc3-57aff2a760ac",
+                    "path": "<XRController>{LeftHand}/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f900c6a0-399b-46dd-a10e-97b94d82cd80",
+                    "path": "<XRController>{RightHand}/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a32bfe54d957ec4581fa4a630f1647a, type: 3}
   m_Name: Open VR Settings
   m_EditorClassIdentifier: 
+  PromptToUpgradePackage: 1
+  PromptToUpgradePreviewPackages: 1
+  SkipPromptForVersion: 
   StereoRenderingMode: 1
   InitializationType: 1
-  EditorAppKey: application.generated.unity.legacy.openfall.1303315840.exe
-  IsLegacy: 1
-  ActionManifestFileRelativeFilePath: E:/UnityProjects/GitHub/OpenFall/Assets/StreamingAssets\SteamVR\legacy_manifest.json
-  MirrorViewMode: 3
-  HasCopiedDefaults: 1
+  EditorAppKey: application.generated.unity.openfall.132767248.exe
+  ActionManifestFileRelativeFilePath: 
+  MirrorView: 2
+  HasCopiedDefaults: 0

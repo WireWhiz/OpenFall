@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
+﻿using Unity.Entities;
 using UnityEngine;
 
 public class CameraRig : MonoBehaviour
@@ -9,6 +7,7 @@ public class CameraRig : MonoBehaviour
     public Transform head;
     public Transform leftHand;
     public Transform rightHand;
+    public Entity linkedRig;
     private void Awake()
     {
         if(instance == null && instance != this)
@@ -16,5 +15,10 @@ public class CameraRig : MonoBehaviour
             Destroy(this);
         }
         instance = this;
+    }
+
+    public void Link(Entity root)
+    {
+        linkedRig = root;
     }
 }

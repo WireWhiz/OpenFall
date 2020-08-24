@@ -1,23 +1,27 @@
 {
   "dependencies": {
-    "com.unity.dots.editor": "0.8.0-preview.1",
+    "com.unity.dots.editor": "0.8.2-preview",
     "com.unity.entities": "0.11.1-preview.4",
     "com.unity.ext.nunit": "1.0.0",
     "com.unity.ide.rider": "2.0.5",
     "com.unity.ide.visualstudio": "2.0.2",
     "com.unity.ide.vscode": "1.2.1",
-    "com.unity.inputsystem": "1.0.0-preview.7",
-    "com.unity.physics": "0.4.0-preview.5",
-    "com.unity.render-pipelines.universal": "7.4.1",
+    "com.unity.inputsystem": "1.0.0",
+    "com.unity.mobile.android-logcat": "1.1.1",
+    "com.unity.netcode": "0.2.0-preview.5",
+    "com.unity.physics": "0.4.1-preview",
+    "com.unity.probuilder": "4.2.3",
+    "com.unity.progrids": "3.0.3-preview.6",
+    "com.unity.render-pipelines.universal": "7.4.2",
     "com.unity.rendering.hybrid": "0.5.2-preview.4",
-    "com.unity.scriptablebuildpipeline": "1.8.6",
-    "com.unity.test-framework": "1.1.14",
+    "com.unity.scriptablebuildpipeline": "1.10.0",
+    "com.unity.test-framework": "1.1.16",
     "com.unity.textmeshpro": "3.0.0-preview.1",
     "com.unity.timeline": "1.2.15",
     "com.unity.ugui": "1.0.0",
-    "com.unity.xr.management": "3.2.12",
-    "com.unity.xr.oculus": "1.3.4",
-    "com.valve.openvr": "file:../steamvr_unity_plugin-UnityXRPlugin",
+    "com.unity.xr.management": "3.2.13",
+    "com.unity.xr.oculus": "1.4.0",
+    "com.unity.xr.windowsmr": "2.2.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -49,5 +53,15 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Valve",
+      "url": "https://registry.npmjs.org/",
+      "scopes": [
+        "com.valvesoftware",
+        "com.valvesoftware.unity.openvr"
+      ]
+    }
+  ]
 }

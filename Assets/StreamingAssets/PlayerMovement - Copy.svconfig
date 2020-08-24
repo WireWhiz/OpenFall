@@ -1,0 +1,41 @@
+Hello, this is our player movement configuration file, 
+it is read by the server and sent to the players.
+
+It stores every movement setting.
+
+It will only read lines
+that start with a money symbol so you can write 
+whatever you want anywhere else.
+
+To define a varible write "$VaribleName value"
+it only works with a single space inbetween and is
+not case sensitive.
+
+speed is in kilometers per hour
+distances are in meters
+
+here's a list of all current variables with their default 
+values, to enable one just add a $ in front:
+gravity 10
+
+maxGroundSpeed 22
+runSpeed 22
+groundAcceleration 37
+minGroundSpeed 22
+groundFriction 4
+
+maxSlideSpeed 32
+slideAcceleration 10
+slideFriction 2
+minSlideSpeed 7
+
+jumpHeight 1.5
+secondJumpHeight 1.5
+maxJumpSpeed 16
+jumpAcceleration 5
+secondJumpAcceleration 34
+
+maxWallSpeed 30
+wallAcceleration 25
+wallJumpAcceleration 20
+maxWallTime 4
